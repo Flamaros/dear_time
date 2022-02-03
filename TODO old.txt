@@ -1,0 +1,26 @@
+But faire des graphiques et statistiques du temps perdu:
+  - Par catégories déterminée par l'utilisateur (Compilation, Investigation sur la CI down,...)
+  - Doit enregistrer les durées d'exécutions avec la date afin de pouvoir faire des query dessus pour les statistiques (et le nom de l'utilisateur)
+  - Faire en sorte de pouvoir combiner les statistiques de plusieurs utilisateurs pour avoir l'effet sur une équipe par exemple.
+  - Temps moyen perdu sur la semaine, par mois, années (résultats lissés)
+  - Courbes pour voir l'évolution des temps de compilation
+  - Grouper les stats par jours
+  
+  
+
+Mode détection automatique:
+ - temps d'exécution de processus comme gcc.exe, cl.exe, link.exe,....
+ - temps d'exécution d'un processus avec des arguments précis (pour détecter les full build,...)
+ - Charge CPU au dela d'un certain seuil pour détecter les freezes d'application comme QtCreator (intellisence bloqué,...) Sera certainement moins fiable comme métrique
+  - Monitoring de lock sur des ressources comme les fichiers?
+  - détecter les changements de hardware (CPU, RAM, CG) et les ajouter aux stats
+  - détecter les changements de version de software? Au lancement du programme par exemple être capable de faire cl.exe --version?
+  - Monitoring des mouvements souris et frape au clavier?
+
+Mode saisie manuelle:
+  - Avec un simple bouton start/stop timer (mettre plusieurs lignes pour en lancer plusieurs en même temps, ligne avec catégorie - bouton start/stop - label du temps en cours)
+
+
+Tech:
+https://github.com/epezent/implot
+Dear ImGui avec DX 11 ou 12

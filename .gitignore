@@ -1,0 +1,18 @@
+*.user
+
+build/
+
+# Visual Studio
+.vs
+Debug
+Release
+x64
+Dear Time/Debug
+Dear Time/Release
+Dear Time/x64
+
+cl.log
+cl.error
+
+# Application files
+Dear Time/imgui.ini

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dear Time", "Dear Time\Dear Time.vcxproj", "{5ABFE9D1-25AC-4042-8964-30C35C2107E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release Dev|x64 = Release Dev|x64
+		Release Dev|x86 = Release Dev|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Debug|x64.ActiveCfg = Debug|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Debug|x64.Build.0 = Debug|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Debug|x86.ActiveCfg = Debug|Win32
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Debug|x86.Build.0 = Debug|Win32
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release Dev|x64.ActiveCfg = Release Dev|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release Dev|x64.Build.0 = Release Dev|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release Dev|x86.ActiveCfg = Release Dev|Win32
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release Dev|x86.Build.0 = Release Dev|Win32
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release|x64.ActiveCfg = Release|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release|x64.Build.0 = Release|x64
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release|x86.ActiveCfg = Release|Win32
+		{5ABFE9D1-25AC-4042-8964-30C35C2107E0}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {036F41A2-D6A1-4CF5-97B0-78A272DDBAC3}
+	EndGlobalSection
+EndGlobal

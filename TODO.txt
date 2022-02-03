@@ -1,0 +1,49 @@
+Voir si je peux changer les niveaux de zoom pour l'axe de abscisse, j'ai peut être besoin que de 10ans, 1 ans, 6mois, 3mois,... 1h
+
+
+Améliorer la fonction qui donne la width des bar:
+  - retourner l'enum Time_Duration et un count (de Time_Duration)
+  - Améliorer encore le découpage les bars sont parfois large
+     - Est-ce qu'il faut se baser sur la taille des bars ou voir pour récuperer les tick et éventuellement pour en configurer l'écart directement par implot?
+
+
+
+GUI:
+  - Ajouter la durée que représente une barre et les stats associées
+  - Ajouter de la GUI pour la création des groupes,...
+  - Mettre l'application en systray quand elle est minimisée
+  - Ajouter des stats
+    - Sur la période actuellement visible sur le graphique
+    - Moyenne/Cumules par jours
+    - Moyenne/Cumules par semaines
+    - Moyenne/Cumules par mois
+    - Moyenne/Cumules par années
+  - Faire une icone pour l'application
+  - Ajouter un manifest pour avoir un nom d'organisation,... rattaché au process (dans processexplorer)
+  - Ajouter un event timer Windows quand la fenêtre freeze lors de son resize pour pouvoir recevoir quelques
+    événements et ainsi continuer à rendre
+
+
+Graphique:
+  - Améliorer le rendu des barres, cumule et scale (width) en fonction du range de temps visible
+    - Possibilité de générer les données que pour le range visible? Limiter le dezoom afin de limiter la quantité de calculs?
+  - Courbe moyenne de temps d'exécution par bar. Pour voir si les temps de compilation augmentent dans le temps.
+  - Voir pour corriger le formatage des dates (--03-25), il semble manquer l'heure et l'année.
+  - Changer la couleur de background pour les tranche horaires travaillées?
+
+
+Backup:
+  - Restorer le niveau de zoom sur le graphique? (backup)
+  - Déplacer l'emplacement de sauvegarde du fichier d'imgui
+
+
+
+PeekMessage semble bloquant quand on clic sur un bord de la fenetre, ce qui fait que j'ai pas de redraw
+https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
+
+
+A récuperer sur les process:
+  - Start Date
+  - End Date (si non possible en calculer une pour avoir une durée minimum de 100ms par exemple)
+  - Path
+  - Arguments

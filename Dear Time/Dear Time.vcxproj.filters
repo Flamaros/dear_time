@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\third-party">
+      <UniqueIdentifier>{976dbb48-1d9f-4f6b-9341-ab93a35daedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\third-party\imgui">
+      <UniqueIdentifier>{f895b384-d9db-42dd-8a45-c555879e1245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\third-party\implot">
+      <UniqueIdentifier>{d19195f0-e464-4201-8a4b-e955f627bcbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\third-party\imgui\backends">
+      <UniqueIdentifier>{dccc4e16-fc93-483c-92bc-2ed034ceb611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{0f83185e-c89d-426c-84e9-2dd1d8c031e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\sources\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\eventsink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\backends\imgui_impl_dx11.cpp">
+      <Filter>Source Files\third-party\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\backends\imgui_impl_win32.cpp">
+      <Filter>Source Files\third-party\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\imgui.cpp">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\imgui_draw.cpp">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\imgui_tables.cpp">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\wmi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\d3d11_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\implot\implot.cpp">
+      <Filter>Source Files\third-party\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\implot\implot_items.cpp">
+      <Filter>Source Files\third-party\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\sources\eventsink.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\backends\imgui_impl_dx11.h">
+      <Filter>Source Files\third-party\imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\backends\imgui_impl_win32.h">
+      <Filter>Source Files\third-party\imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imconfig.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imgui.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imgui_internal.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imstb_rectpack.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imstb_textedit.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\imgui\imstb_truetype.h">
+      <Filter>Source Files\third-party\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\ui.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\wmi.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\d3d11_helpers.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\implot\implot.h">
+      <Filter>Source Files\third-party\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\implot\implot_internal.h">
+      <Filter>Source Files\third-party\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\application.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\time.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\TODO.txt">
+      <Filter>Resources</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
