@@ -224,6 +224,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         ::PostQuitMessage(0);
         return 0;
+
+    case WM_QUERYENDSESSION:
+        return TRUE; // Don't lock the shutdown of user session
+    case WM_ENDSESSION:
+        safe_backup();
+        // https://docs.microsoft.com/fr-fr/windows/win32/shutdown/wm-endsession
+        g_dear_time.done = true;
+        g_dear_time.done_by_end_session = true;
+        return 0;
     }
     return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }

@@ -60,6 +60,15 @@ struct DearTime
 {
 	bool				ready_to_draw = false;
 	bool				done = false;
+
+	// Flag to know if the user session is ending, in which case we shorten the shutdown path
+	// We don't have to destroy DX context and Window in this case. We just have to ensure we do
+	// the backup as fast as possible
+	bool				done_by_end_session = false;
+
+	// Flag to know if we already took the shortest path
+	bool				has_shutdown = false;
+
 	bool				is_quitting = false;
 	CRITICAL_SECTION	is_quitting_critical_section;
 	CRITICAL_SECTION	editing_groups_critical_section;
@@ -81,6 +90,7 @@ extern DearTime g_dear_time;
 
 void initialize_application();
 void shutdown_application();
+void safe_backup();
 
 //==============================================================================
 

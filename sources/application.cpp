@@ -48,54 +48,55 @@ void initialize_application()
 			char magic_number[5];
 			ReadFile(hFile, &magic_number[0], sizeof(magic_number), &dwBytesRead, NULL);
 
-			assert(strncmp(magic_number, "DTIME", 5) == 0);
-
-			uint32_t file_format_version;
-
-			ReadFile(hFile, &file_format_version, sizeof(file_format_version), &dwBytesRead, NULL);
-
-			uint32_t nb_groups;
-			ReadFile(hFile, &nb_groups, sizeof(nb_groups), &dwBytesRead, NULL);
-			for (uint32_t group_index = 0; group_index < nb_groups; group_index++)
+			if (strncmp(magic_number, "DTIME", 5) == 0)
 			{
-				Group* group = new Group();
+				uint32_t file_format_version;
 
-				uint32_t group_name_size;
-				ReadFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesRead, NULL);
+				ReadFile(hFile, &file_format_version, sizeof(file_format_version), &dwBytesRead, NULL);
 
-				group->name.resize(group_name_size);
-				ReadFile(hFile, group->name.data(), group_name_size * sizeof(*group->name.data()), &dwBytesRead, NULL);
-
-				uint32_t nb_process_names;
-				ReadFile(hFile, &nb_process_names, sizeof(nb_process_names), &dwBytesRead, NULL);
-				for (uint32_t process_name_index = 0; process_name_index < nb_process_names; process_name_index++)
+				uint32_t nb_groups;
+				ReadFile(hFile, &nb_groups, sizeof(nb_groups), &dwBytesRead, NULL);
+				for (uint32_t group_index = 0; group_index < nb_groups; group_index++)
 				{
-					uint32_t process_name_size;
-					ReadFile(hFile, &process_name_size, sizeof(process_name_size), &dwBytesRead, NULL);
-					std::wstring process_name;
+					Group* group = new Group();
 
-					process_name.resize(process_name_size);
-					ReadFile(hFile, process_name.data(), process_name_size * sizeof(*process_name.data()), &dwBytesRead, NULL);
-					group->proccess_names.insert(process_name);
+					uint32_t group_name_size;
+					ReadFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesRead, NULL);
+
+					group->name.resize(group_name_size);
+					ReadFile(hFile, group->name.data(), group_name_size * sizeof(*group->name.data()), &dwBytesRead, NULL);
+
+					uint32_t nb_process_names;
+					ReadFile(hFile, &nb_process_names, sizeof(nb_process_names), &dwBytesRead, NULL);
+					for (uint32_t process_name_index = 0; process_name_index < nb_process_names; process_name_index++)
+					{
+						uint32_t process_name_size;
+						ReadFile(hFile, &process_name_size, sizeof(process_name_size), &dwBytesRead, NULL);
+						std::wstring process_name;
+
+						process_name.resize(process_name_size);
+						ReadFile(hFile, process_name.data(), process_name_size * sizeof(*process_name.data()), &dwBytesRead, NULL);
+						group->proccess_names.insert(process_name);
+					}
+
+					uint32_t nb_merged_executions;
+
+					ReadFile(hFile, &nb_merged_executions, sizeof(nb_merged_executions), &dwBytesRead, NULL);
+					group->merged_executions.resize(nb_merged_executions);
+					ReadFile(hFile, group->merged_executions.data(), nb_merged_executions * sizeof(*group->merged_executions.data()), &dwBytesRead, NULL);
+
+					InitializeCriticalSection(&group->executions_critical_section);
+					g_dear_time.groups.insert(std::make_pair(group->name, group));
 				}
 
-				uint32_t nb_merged_executions;
+				// Selected group name
+				{
+					uint32_t group_name_size;
+					ReadFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesRead, NULL);
 
-				ReadFile(hFile, &nb_merged_executions, sizeof(nb_merged_executions), &dwBytesRead, NULL);
-				group->merged_executions.resize(nb_merged_executions);
-				ReadFile(hFile, group->merged_executions.data(), nb_merged_executions * sizeof(*group->merged_executions.data()), &dwBytesRead, NULL);
-
-				InitializeCriticalSection(&group->executions_critical_section);
-				g_dear_time.groups.insert(std::make_pair(group->name, group));
-			}
-
-			// Selected group name
-			{
-				uint32_t group_name_size;
-				ReadFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesRead, NULL);
-
-				g_dear_time.current_group_name.resize(group_name_size);
-				ReadFile(hFile, g_dear_time.current_group_name.data(), group_name_size * sizeof(*g_dear_time.current_group_name.data()), &dwBytesRead, NULL);
+					g_dear_time.current_group_name.resize(group_name_size);
+					ReadFile(hFile, g_dear_time.current_group_name.data(), group_name_size * sizeof(*g_dear_time.current_group_name.data()), &dwBytesRead, NULL);
+				}
 			}
 		}
 
@@ -114,10 +115,18 @@ void initialize_application()
 	InterlockedExchange(g_dear_time.nb_requested_redraws, min_nb_redraws);
 }
 
+// This method is suceptible to use the 'done_by_end_session' flag to do only critical operations
+// (like backuping data)
 void shutdown_application()
 {
 	// We don't call destructors, we let Windows do the dirty job (much faster than us)
 
+	if (!g_dear_time.done_by_end_session) // Already saved (not even sure that Windows haven't already killed this process)
+		safe_backup();
+}
+
+void safe_backup()
+{
 	// @TODO check errors
 
 	// Backup records
@@ -134,31 +143,40 @@ void shutdown_application()
 	WriteFile(hFile, "DTIME", 5, &dwBytesWritten, NULL);
 	WriteFile(hFile, &record_format_version, sizeof(record_format_version), &dwBytesWritten, NULL);
 
-	uint32_t nb_groups = (uint32_t)g_dear_time.groups.size();
-	WriteFile(hFile, &nb_groups, sizeof(nb_groups), &dwBytesWritten, NULL);
-	for (auto group_pair : g_dear_time.groups)
+	EnterCriticalSection(&g_dear_time.editing_groups_critical_section);
 	{
-		uint32_t group_name_size = (uint32_t)group_pair.first.size();
-
-		WriteFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesWritten, NULL);
-		WriteFile(hFile, group_pair.first.data(), group_name_size * sizeof(*group_pair.first.data()), &dwBytesWritten, NULL);
-
-		uint32_t nb_process_names = (uint32_t)group_pair.second->proccess_names.size();
-
-		WriteFile(hFile, &nb_process_names, sizeof(nb_process_names), &dwBytesWritten, NULL);
-		for (const auto& process_name : group_pair.second->proccess_names)
+		uint32_t nb_groups = (uint32_t)g_dear_time.groups.size();
+		WriteFile(hFile, &nb_groups, sizeof(nb_groups), &dwBytesWritten, NULL);
+		for (auto group_pair : g_dear_time.groups)
 		{
-			uint32_t process_name_size = (uint32_t)process_name.size();
+			uint32_t group_name_size = (uint32_t)group_pair.first.size();
 
-			WriteFile(hFile, &process_name_size, sizeof(process_name_size), &dwBytesWritten, NULL);
-			WriteFile(hFile, process_name.data(), process_name_size * sizeof(*process_name.data()), &dwBytesWritten, NULL);
+			WriteFile(hFile, &group_name_size, sizeof(group_name_size), &dwBytesWritten, NULL);
+			WriteFile(hFile, group_pair.first.data(), group_name_size * sizeof(*group_pair.first.data()), &dwBytesWritten, NULL);
+
+			uint32_t nb_process_names = (uint32_t)group_pair.second->proccess_names.size();
+
+			WriteFile(hFile, &nb_process_names, sizeof(nb_process_names), &dwBytesWritten, NULL);
+			for (const auto& process_name : group_pair.second->proccess_names)
+			{
+				uint32_t process_name_size = (uint32_t)process_name.size();
+
+				WriteFile(hFile, &process_name_size, sizeof(process_name_size), &dwBytesWritten, NULL);
+				WriteFile(hFile, process_name.data(), process_name_size * sizeof(*process_name.data()), &dwBytesWritten, NULL);
+			}
+
+			Group* tracking_group = group_pair.second;
+			EnterCriticalSection(&tracking_group->executions_critical_section);
+			{
+				uint32_t nb_merged_executions = (uint32_t)tracking_group->merged_executions.size();
+
+				WriteFile(hFile, &nb_merged_executions, sizeof(nb_merged_executions), &dwBytesWritten, NULL);
+				WriteFile(hFile, tracking_group->merged_executions.data(), nb_merged_executions * sizeof(*tracking_group->merged_executions.data()), &dwBytesWritten, NULL);
+			}
+			LeaveCriticalSection(&tracking_group->executions_critical_section);
 		}
-
-		uint32_t nb_merged_executions = (uint32_t)group_pair.second->merged_executions.size();
-
-		WriteFile(hFile, &nb_merged_executions, sizeof(nb_merged_executions), &dwBytesWritten, NULL);
-		WriteFile(hFile, group_pair.second->merged_executions.data(), nb_merged_executions * sizeof(*group_pair.second->merged_executions.data()), &dwBytesWritten, NULL);
 	}
+	LeaveCriticalSection(&g_dear_time.editing_groups_critical_section);
 
 	// Selected group name
 	{
@@ -170,6 +188,7 @@ void shutdown_application()
 
 	CloseHandle(hFile);
 }
+
 
 //==============================================================================
 
